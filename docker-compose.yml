@@ -1,0 +1,25 @@
+version: "3.7"
+
+networks:
+
+  internal:
+    external: false
+    name: myapp-internal
+
+  external:
+    external: true
+    name: external
+
+services:
+
+  myapp-php:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: myapp-php
+    image: myapp-php
+    networks:
+      - internal
+    tty: true
+    volumes:
+      - ./src:/var/www/html
