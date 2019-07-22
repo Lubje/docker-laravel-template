@@ -12,6 +12,23 @@ networks:
 
 services:
 
+  myapp-mysql:
+    container_name: myapp-mysql
+    environment:
+      MYSQL_DATABASE: myapp
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: secret
+    image: mysql:${MYSQL_VERSION:-5.7}
+    networks:
+      - internal
+      - external
+    ports:
+      - 3306:3306
+    tty: true
+    volumes:
+      - myapp-mysql:/var/lib/mysql
+
   myapp-php:
     build:
       context: .
@@ -23,3 +40,7 @@ services:
     tty: true
     volumes:
       - ./src:/var/www/html
+
+volumes:
+  myapp-mysql:
+    name: myapp-mysql
