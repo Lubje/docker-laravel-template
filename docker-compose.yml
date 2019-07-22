@@ -29,6 +29,18 @@ services:
     volumes:
       - myapp-mysql:/var/lib/mysql
 
+  myapp-redis:
+    container_name: myapp-redis
+    image: redis:${REDIS_VERSION:-5.0.5-alpine3.10}
+    networks:
+      - internal
+      - external
+    ports:
+      - 6379:6379
+    tty: true
+    volumes:
+      - myapp-redis:/data
+
   myapp-php:
     build:
       context: .
@@ -44,3 +56,5 @@ services:
 volumes:
   myapp-mysql:
     name: myapp-mysql
+  myapp-redis:
+    name: myapp-redis
