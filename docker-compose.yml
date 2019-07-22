@@ -53,6 +53,23 @@ services:
     volumes:
       - ./src:/var/www/html
 
+  myapp-nginx:
+    build:
+      args:
+        NGINX_VERSION: ${NGINX_VERSION:-1.17}
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    container_name: myapp-nginx
+    image: myapp-nginx
+    networks:
+      - internal
+      - external
+    ports:
+      - 80:80
+    tty: true
+    volumes:
+      - ./src/public:/var/www/html/public
+
 volumes:
   myapp-mysql:
     name: myapp-mysql
