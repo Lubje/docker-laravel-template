@@ -46,6 +46,9 @@ services:
       context: .
       dockerfile: docker/php/Dockerfile
     container_name: myapp-php
+    depends_on:
+      - myapp-mysql
+      - myapp-redis
     image: myapp-php
     networks:
       - internal
@@ -60,6 +63,10 @@ services:
       context: .
       dockerfile: docker/nginx/Dockerfile
     container_name: myapp-nginx
+    depends_on:
+      - myapp-mysql
+      - myapp-redis
+      - myapp-php
     image: myapp-nginx
     networks:
       - internal
