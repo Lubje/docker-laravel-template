@@ -19,7 +19,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: user
       MYSQL_PASSWORD: secret
-    image: mysql:${MYSQL_VERSION:-5.7}
+    image: mysql:${MYSQL_VERSION:-8.0}
     networks:
       - internal
       - external
@@ -31,7 +31,7 @@ services:
 
   myapp-redis:
     container_name: myapp-redis
-    image: redis:${REDIS_VERSION:-5.0.5-alpine3.10}
+    image: redis:${REDIS_VERSION:-5.0-alpine3.10}
     networks:
       - internal
       - external
