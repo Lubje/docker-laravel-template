@@ -1,2 +1,6 @@
+# Folders
 /src
 .idea
+
+# Files
+.env
