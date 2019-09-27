@@ -1,6 +1,6 @@
 .DEFAULT_GOAL:=help
 SHELL:=/bin/bash
-APP_NAME = myapp
+COMPOSE_PROJECT_NAME = myapp
 
 
 ##@ Docker
@@ -16,7 +16,7 @@ down:  ## Stop and remove all containers
 	docker-compose down
 
 enter: ## Run bash inside php container
-	docker exec -it $(APP_NAME)-php bash
+	docker exec -it $(COMPOSE_PROJECT_NAME)-php bash
 
 images: ## List all images
 	docker images
@@ -36,19 +36,19 @@ up:  ## Create all containers
 .PHONY: composer-install composer-install-dry composer-update composer-update-dry composer-version
 
 composer-install: ## Run composer install
-	docker-compose exec $(APP_NAME)-php composer --version
+	docker-compose exec $(COMPOSE_PROJECT_NAME)-php composer --version
 
 composer-install-dry: ## Run composer install --dry-run
-	docker-compose exec $(APP_NAME)-php composer install --dry-run
+	docker-compose exec $(COMPOSE_PROJECT_NAME)-php composer install --dry-run
 
 composer-update: ## Run composer update
-	docker-compose exec $(APP_NAME)-php composer update
+	docker-compose exec $(COMPOSE_PROJECT_NAME)-php composer update
 
 composer-update-dry: ## Run composer update --dry-run
-	docker-compose exec $(APP_NAME)-php composer update --dry-run
+	docker-compose exec $(COMPOSE_PROJECT_NAME)-php composer update --dry-run
 
 composer-version: ## Get composer version
-	docker-compose exec $(APP_NAME)-php composer --version
+	docker-compose exec $(COMPOSE_PROJECT_NAME)-php composer --version
 
 
 ##TODO##@ Testing
@@ -62,16 +62,16 @@ log: ## Show all logs
 	docker-compose logs --follow
 
 log-mysql: ## Show mysql logs
-	docker logs --follow --timestamps --tail=100 $(APP_NAME)-mysql
+	docker logs --follow --timestamps --tail=100 $(COMPOSE_PROJECT_NAME)-mysql
 
 log-nginx: ## Show nginx logs
-	docker logs --follow --timestamps --tail=100 $(APP_NAME)-nginx
+	docker logs --follow --timestamps --tail=100 $(COMPOSE_PROJECT_NAME)-nginx
 
 log-php: ## Show php logs
-	docker logs --follow --timestamps --tail=100 $(APP_NAME)-php
+	docker logs --follow --timestamps --tail=100 $(COMPOSE_PROJECT_NAME)-php
 
 log-redis: ## Show redis logs
-	docker logs --follow --timestamps --tail=100 $(APP_NAME)-redis
+	docker logs --follow --timestamps --tail=100 $(COMPOSE_PROJECT_NAME)-redis
 
 
 ##@ Helpers

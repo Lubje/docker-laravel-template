@@ -4,7 +4,7 @@ networks:
 
   internal:
     external: false
-    name: myapp-internal
+    name: ${COMPOSE_PROJECT_NAME}-internal
 
   external:
     external: true
@@ -12,10 +12,10 @@ networks:
 
 services:
 
-  myapp-mysql:
-    container_name: myapp-mysql
+  mysql:
+    container_name: ${COMPOSE_PROJECT_NAME}-mysql
     environment:
-      MYSQL_DATABASE: myapp
+      MYSQL_DATABASE: ${COMPOSE_PROJECT_NAME}_local
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: user
       MYSQL_PASSWORD: secret
@@ -27,10 +27,10 @@ services:
       - 3306:3306
     tty: true
     volumes:
-      - myapp-mysql:/var/lib/mysql
+      - mysql:/var/lib/mysql
 
-  myapp-redis:
-    container_name: myapp-redis
+  redis:
+    container_name: ${COMPOSE_PROJECT_NAME}-redis
     image: redis:${REDIS_VERSION:-5.0-alpine3.10}
     networks:
       - internal
@@ -39,35 +39,35 @@ services:
       - 6379:6379
     tty: true
     volumes:
-      - myapp-redis:/data
+      - redis:/data
 
-  myapp-php:
+  php:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
-    container_name: myapp-php
+    container_name: ${COMPOSE_PROJECT_NAME}-php
     depends_on:
-      - myapp-mysql
-      - myapp-redis
-    image: myapp-php
+      - mysql
+      - redis
+    image: ${COMPOSE_PROJECT_NAME}-php
     networks:
       - internal
     tty: true
     volumes:
       - ./src:/var/www/html
 
-  myapp-nginx:
+  nginx:
     build:
       args:
         NGINX_VERSION: ${NGINX_VERSION:-1.17}
       context: .
       dockerfile: docker/nginx/Dockerfile
-    container_name: myapp-nginx
+    container_name: ${COMPOSE_PROJECT_NAME}-nginx
     depends_on:
-      - myapp-mysql
-      - myapp-redis
-      - myapp-php
-    image: myapp-nginx
+      - mysql
+      - redis
+      - php
+    image: ${COMPOSE_PROJECT_NAME}-nginx
     networks:
       - internal
       - external
@@ -78,7 +78,7 @@ services:
       - ./src/public:/var/www/html/public
 
 volumes:
-  myapp-mysql:
-    name: myapp-mysql
-  myapp-redis:
-    name: myapp-redis
+  mysql:
+    name: ${COMPOSE_PROJECT_NAME}-mysql
+  redis:
+    name: ${COMPOSE_PROJECT_NAME}-redis
