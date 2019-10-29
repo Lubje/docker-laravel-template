@@ -36,7 +36,7 @@ up:  ## Create all containers
 .PHONY: composer-install composer-install-dry composer-update composer-update-dry composer-version
 
 composer-install: ## Run composer install
-	docker-compose exec $(COMPOSE_PROJECT_NAME)-php composer --version
+	docker-compose exec $(COMPOSE_PROJECT_NAME)-php composer install
 
 composer-install-dry: ## Run composer install --dry-run
 	docker-compose exec $(COMPOSE_PROJECT_NAME)-php composer install --dry-run
