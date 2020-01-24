@@ -28,19 +28,19 @@ up:  ## Create all containers
 ##@ Building
 
 composer-install: ## Run composer install
-	docker-compose exec $(PROJECT_NAME)-php composer install
+	docker exec $(PROJECT_NAME)-php composer install
 
 composer-install-dry: ## Run composer install --dry-run
-	docker-compose exec $(PROJECT_NAME)-php composer install --dry-run
+	docker exec $(PROJECT_NAME)-php composer install --dry-run
 
 composer-update: ## Run composer update
-	docker-compose exec $(PROJECT_NAME)-php composer update
+	docker exec $(PROJECT_NAME)-php composer update
 
 composer-update-dry: ## Run composer update --dry-run
-	docker-compose exec $(PROJECT_NAME)-php composer update --dry-run
+	docker exec $(PROJECT_NAME)-php composer update --dry-run
 
 composer-version: ## Get composer version
-	docker-compose exec $(PROJECT_NAME)-php composer --version
+	docker exec $(PROJECT_NAME)-php composer --version
 
 
 # ##@ Building (npm)
@@ -59,7 +59,7 @@ composer-version: ## Get composer version
 .PHONY: test test-unit test-feature stan coverage
 
 test: ## Run phpunit
-		docker exec -it -w /var/www/html $(COMPOSE_PROJECT_NAME)-app ./vendor/bin/phpunit $$([[ -n "$(filter)" ]] && echo "--filter $(filter)")
+		docker exec -it -w /var/www/html $(PROJECT_NAME)-php ./vendor/bin/phpunit $$([[ -n "$(filter)" ]] && echo "--filter $(filter)")
 
 
 ##@ Logging
