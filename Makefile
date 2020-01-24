@@ -1,25 +1,18 @@
 .DEFAULT_GOAL:=help
 SHELL:=/bin/bash
-COMPOSE_PROJECT_NAME = myapp
+PROJECT_NAME=myapp
 
 
 ##@ Docker
-.PHONY: build containers down enter images restart restart-down stop up
+
+bash: ## Run bash inside php container
+	docker exec -it $(PROJECT_NAME)-php bash
 
 build:  ## Build all images
 	docker-compose build --no-cache
 
-containers: ## List all containers
-	docker ps -a
-
 down:  ## Stop and remove all containers
 	docker-compose down
-
-enter: ## Run bash inside php container
-	docker exec -it $(COMPOSE_PROJECT_NAME)-php bash
-
-images: ## List all images
-	docker images
 
 restart: stop up ## Stop and start all containers
 
@@ -33,49 +26,61 @@ up:  ## Create all containers
 
 
 ##@ Building
-.PHONY: composer-install composer-install-dry composer-update composer-update-dry composer-version
 
 composer-install: ## Run composer install
-	docker-compose exec $(COMPOSE_PROJECT_NAME)-php composer install
+	docker-compose exec $(PROJECT_NAME)-php composer install
 
 composer-install-dry: ## Run composer install --dry-run
-	docker-compose exec $(COMPOSE_PROJECT_NAME)-php composer install --dry-run
+	docker-compose exec $(PROJECT_NAME)-php composer install --dry-run
 
 composer-update: ## Run composer update
-	docker-compose exec $(COMPOSE_PROJECT_NAME)-php composer update
+	docker-compose exec $(PROJECT_NAME)-php composer update
 
 composer-update-dry: ## Run composer update --dry-run
-	docker-compose exec $(COMPOSE_PROJECT_NAME)-php composer update --dry-run
+	docker-compose exec $(PROJECT_NAME)-php composer update --dry-run
 
 composer-version: ## Get composer version
-	docker-compose exec $(COMPOSE_PROJECT_NAME)-php composer --version
+	docker-compose exec $(PROJECT_NAME)-php composer --version
 
 
-##TODO##@ Testing
-##TODO:.PHONY: test unit feature stan coverage
+# ##@ Building (npm)
+#
+#run-dev: ## Run npm run dev
+#	docker-compose exec $(PROJECT_NAME)-php npm run dev
+#
+#run-prod: ## Run npm run prod
+#	docker-compose exec $(PROJECT_NAME)-php npm run prod
+#
+#watch: ## Run npm run watch
+#	docker-compose exec $(PROJECT_NAME)-php npm run watch
+
+
+##@ Testing
+.PHONY: test test-unit test-feature stan coverage
+
+test: ## Run phpunit
+		docker exec -it -w /var/www/html $(COMPOSE_PROJECT_NAME)-app ./vendor/bin/phpunit $$([[ -n "$(filter)" ]] && echo "--filter $(filter)")
 
 
 ##@ Logging
-.PHONY: log log-mysql log-nginx log-php log-redis
 
 log: ## Show all logs
 	docker-compose logs --follow
 
 log-mysql: ## Show mysql logs
-	docker logs --follow --timestamps --tail=100 $(COMPOSE_PROJECT_NAME)-mysql
+	docker logs --follow --timestamps --tail=100 $(PROJECT_NAME)-mysql
 
 log-nginx: ## Show nginx logs
-	docker logs --follow --timestamps --tail=100 $(COMPOSE_PROJECT_NAME)-nginx
+	docker logs --follow --timestamps --tail=100 $(PROJECT_NAME)-nginx
 
 log-php: ## Show php logs
-	docker logs --follow --timestamps --tail=100 $(COMPOSE_PROJECT_NAME)-php
+	docker logs --follow --timestamps --tail=100 $(PROJECT_NAME)-php
 
 log-redis: ## Show redis logs
-	docker logs --follow --timestamps --tail=100 $(COMPOSE_PROJECT_NAME)-redis
+	docker logs --follow --timestamps --tail=100 $(PROJECT_NAME)-redis
 
 
 ##@ Helpers
-.PHONY: help
 
 help:  ## Display this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)

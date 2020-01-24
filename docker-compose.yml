@@ -4,7 +4,7 @@ networks:
 
   internal:
     external: false
-    name: ${COMPOSE_PROJECT_NAME}-internal
+    name: ${PROJECT_NAME}-internal
 
   external:
     external: true
@@ -13,9 +13,10 @@ networks:
 services:
 
   mysql:
-    container_name: ${COMPOSE_PROJECT_NAME}-mysql
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: ${PROJECT_NAME}-mysql
     environment:
-      MYSQL_DATABASE: ${COMPOSE_PROJECT_NAME}_local
+      MYSQL_DATABASE: ${PROJECT_NAME}_local
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: user
       MYSQL_PASSWORD: secret
@@ -30,8 +31,8 @@ services:
       - mysql:/var/lib/mysql
 
   redis:
-    container_name: ${COMPOSE_PROJECT_NAME}-redis
-    image: redis:${REDIS_VERSION:-5.0-alpine3.10}
+    container_name: ${PROJECT_NAME}-redis
+    image: redis:${REDIS_VERSION:-5.0-alpine3.11}
     networks:
       - internal
       - external
@@ -45,11 +46,11 @@ services:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
-    container_name: ${COMPOSE_PROJECT_NAME}-php
+    container_name: ${PROJECT_NAME}-php
     depends_on:
       - mysql
       - redis
-    image: ${COMPOSE_PROJECT_NAME}-php
+    image: ${PROJECT_NAME}-php
     networks:
       - internal
     tty: true
@@ -62,12 +63,12 @@ services:
         NGINX_VERSION: ${NGINX_VERSION:-1.17}
       context: .
       dockerfile: docker/nginx/Dockerfile
-    container_name: ${COMPOSE_PROJECT_NAME}-nginx
+    container_name: ${PROJECT_NAME}-nginx
     depends_on:
       - mysql
       - redis
       - php
-    image: ${COMPOSE_PROJECT_NAME}-nginx
+    image: ${PROJECT_NAME}-nginx
     networks:
       - internal
       - external
@@ -79,6 +80,6 @@ services:
 
 volumes:
   mysql:
-    name: ${COMPOSE_PROJECT_NAME}-mysql
+    name: ${PROJECT_NAME}-mysql
   redis:
-    name: ${COMPOSE_PROJECT_NAME}-redis
+    name: ${PROJECT_NAME}-redis
