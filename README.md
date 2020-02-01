@@ -1,6 +1,6 @@
 1. Clone the repository:
 ```
-$ git clone git@github.com:Lubje/docker-template.git myproject
+$ git clone git@github.com:Lubje/docker-laravel-template.git myproject
 ``` 
 2. Enter the created directory:
 ```
