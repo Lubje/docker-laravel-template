@@ -1,6 +1,7 @@
 .DEFAULT_GOAL := help
 SHELL := /bin/bash
-PROJECT_NAME := myproject
+mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
+PROJECT_NAME := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
 
 
 ##@ Docker
