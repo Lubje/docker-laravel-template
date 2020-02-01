@@ -25,7 +25,7 @@ services:
       - internal
       - external
     ports:
-      - ${MYSQL_EXTERNAL_PORT:-3306}:3306
+      - 3306${EXTERNAL_PORT_SUFFIX:-1}:3306
     tty: true
     volumes:
       - mysql:/var/lib/mysql
@@ -37,7 +37,7 @@ services:
       - internal
       - external
     ports:
-      - ${REDIS_EXTERNAL_PORT:-6379}:6379
+      - 6379${EXTERNAL_PORT_SUFFIX:-1}:6379
     tty: true
     volumes:
       - redis:/data
@@ -73,7 +73,7 @@ services:
       - internal
       - external
     ports:
-      - ${NGINX_EXTERNAL_PORT:-80}:80
+      - 80${EXTERNAL_PORT_SUFFIX:-1}:80
     tty: true
     volumes:
       - ./src/public:/var/www/html/public
