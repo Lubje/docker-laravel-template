@@ -7,6 +7,10 @@ if [ -f "$ENV_FILE" ]; then
     exit 0
 fi
 
+# Create the source and public folder
+mkdir src
+mkdir src/public
+
 # Determine project name based on current directory name
 project_name=${PWD##*/}
 echo Your project name will be ${project_name}
@@ -46,9 +50,6 @@ docker exec ${project_name}-php composer install
 # Restarting all the services
 echo Restarting the services
 make restart
-
-# Scaffolding the authentication lsb_release -a
-docker exec ${project_name}-php php artisan make:auth
 
 # Display final instructions
 echo Now go to http://localhost:80${port_suffix} and edit your src/.env file as needed and run 'make' to see the available commands..
