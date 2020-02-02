@@ -64,7 +64,7 @@ test: ## Run phpunit
 
 ##@ Logging
 
-log: ## Show all logs
+logs: ## Show all logs
 	docker-compose logs --follow
 
 log-mysql: ## Show mysql logs
