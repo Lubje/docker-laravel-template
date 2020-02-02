@@ -57,7 +57,6 @@ watch: ## Run npm run watch
 
 
 ##@ Testing
-.PHONY: test test-unit test-feature stan coverage
 
 test: ## Run phpunit
 	docker exec -it -w /var/www/html $(PROJECT_NAME)-php ./vendor/bin/phpunit $$([[ -n "$(filter)" ]] && echo "--filter $(filter)")
