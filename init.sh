@@ -18,8 +18,9 @@ echo "COMPOSE_PROJECT_NAME=""${project_name}" >> .env
 echo COMPOSE_PROJECT_NAME set to \""${project_name}"\" in the .env file.
 
 # Ask for external port suffix number
-echo Enter the external port suffix number to use, to avoid \"port is already allocated\" errors:
-read port_suffix
+echo Enter a number to use as port-suffix and press enter, to make the external ports unique.
+echo For example, entering \"4\" will result in the following ports being used: 33064 \(MySQL\), 63794 \(Redis\), 804 \(NGINX\).
+read -r port_suffix
 
 # Set the chosen port suffix in the .env file
 echo "EXTERNAL_PORT_SUFFIX=""${port_suffix}" >> .env
