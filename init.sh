@@ -7,9 +7,8 @@ if [ -f "$ENV_FILE" ]; then
     exit 0
 fi
 
-# Create src and (temporarily) src/public folder needed for volume mounting in docker-compose file
-mkdir src
-mkdir src/public
+# Create src/public folder needed for volume mounting in docker-compose file
+mkdir -p src/public
 
 # Determine project name based on current directory name
 project_name=${PWD##*/}
