@@ -19,7 +19,7 @@ echo COMPOSE_PROJECT_NAME set to \""${project_name}"\" in the .env file.
 
 # Ask for external port suffix number
 echo Enter a number to use as port-suffix and press enter, to make the external ports unique.
-echo For example, entering \"4\" will result in the following ports being used: 33064 \(MySQL\), 63794 \(Redis\), 804 \(NGINX\).
+echo For example, entering \"4\" will result in the following ports being used: 33064\(MySQL\), 63794\(Redis\), 804\(NGINX\).
 read -r port_suffix
 
 # Set the chosen port suffix in the .env file
@@ -38,11 +38,11 @@ rm -rf src/public
 echo Installing the latest version of Laravel in /src:/var/www/html..
 docker exec "${project_name}"-php composer create-project --prefer-dist laravel/laravel /var/www/html
 
-# Running initial composer install
+# Run initial composer install
 echo Running initial composer install..
 docker exec "${project_name}"-php composer install
 
-# Restarting all the services
+# Restart all the services
 echo Restarting the services..
 make restart
 
