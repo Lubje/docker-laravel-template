@@ -44,16 +44,16 @@ composer-version: ## Get composer version
 	docker exec $(PROJECT_NAME)-php composer --version
 
 
-# ##@ Building (npm)
-#
-#run-dev: ## Run npm run dev
-#	docker-compose exec $(PROJECT_NAME)-php npm run dev
-#
-#run-prod: ## Run npm run prod
-#	docker-compose exec $(PROJECT_NAME)-php npm run prod
-#
-#watch: ## Run npm run watch
-#	docker-compose exec $(PROJECT_NAME)-php npm run watch
+##@ Building (npm)
+
+run-dev: ## Run npm run dev
+	docker exec -it $(PROJECT_NAME)-php npm run dev
+
+run-prod: ## Run npm run prod
+	docker exec -it $(PROJECT_NAME)-php npm run prod
+
+watch: ## Run npm run watch
+	docker exec -it $(PROJECT_NAME)-php npm run watch
 
 
 ##@ Testing
