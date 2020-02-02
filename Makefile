@@ -26,7 +26,7 @@ up:  ## Create all containers
 	docker-compose up -d
 
 
-##@ Building
+##@ Building (composer)
 
 composer-install: ## Run composer install
 	docker exec $(PROJECT_NAME)-php composer install
@@ -60,7 +60,7 @@ composer-version: ## Get composer version
 .PHONY: test test-unit test-feature stan coverage
 
 test: ## Run phpunit
-		docker exec -it -w /var/www/html $(PROJECT_NAME)-php ./vendor/bin/phpunit $$([[ -n "$(filter)" ]] && echo "--filter $(filter)")
+	docker exec -it -w /var/www/html $(PROJECT_NAME)-php ./vendor/bin/phpunit $$([[ -n "$(filter)" ]] && echo "--filter $(filter)")
 
 
 ##@ Logging
@@ -86,7 +86,7 @@ log-redis: ## Show redis logs
 help:  ## Display this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-## PROJECT: create
+
+## TODO:
 ## ARTISAN: migrate, fresh
-## NPM: watch, run-dev, run-prod
-## QUALITY: cs
+## TESTING: test-unit test-feature stan coverage
