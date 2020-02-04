@@ -8,5 +8,5 @@ $ cd myproject
 ```
 3. Run the initialisation script
 ```
-$ ./init.sh
+$ ./initialize.sh
 ```
