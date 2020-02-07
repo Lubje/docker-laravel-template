@@ -1,13 +1,13 @@
+include .env
+
 .DEFAULT_GOAL := help
 SHELL := /bin/bash
-mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
-PROJECT_NAME := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
 
 
-##@ Docker
+##@ Docker(-compose)
 
 bash: ## Run bash inside php container
-	docker exec -it $(PROJECT_NAME)-php bash
+	docker exec -it $(COMPOSE_PROJECT_NAME)-php bash
 
 build:  ## Build all images
 	docker-compose build --no-cache
@@ -29,40 +29,40 @@ up:  ## Create all containers
 ##@ Building (composer)
 
 composer-install: ## Run composer install
-	docker exec $(PROJECT_NAME)-php composer install
+	docker exec $(COMPOSE_PROJECT_NAME)-php composer install
 
 composer-install-dry: ## Run composer install --dry-run
-	docker exec $(PROJECT_NAME)-php composer install --dry-run
+	docker exec $(COMPOSE_PROJECT_NAME)-php composer install --dry-run
 
 composer-outdated: ## Run composer outdated
-	docker exec $(PROJECT_NAME)-php composer outdated
+	docker exec $(COMPOSE_PROJECT_NAME)-php composer outdated
 
 composer-update: ## Run composer update
-	docker exec $(PROJECT_NAME)-php composer update
+	docker exec $(COMPOSE_PROJECT_NAME)-php composer update
 
 composer-update-dry: ## Run composer update --dry-run
-	docker exec $(PROJECT_NAME)-php composer update --dry-run
+	docker exec $(COMPOSE_PROJECT_NAME)-php composer update --dry-run
 
 composer-version: ## Get composer version
-	docker exec $(PROJECT_NAME)-php composer --version
+	docker exec $(COMPOSE_PROJECT_NAME)-php composer --version
 
 
 ##@ Building (npm)
 
 run-dev: ## Run npm run dev
-	docker exec -it $(PROJECT_NAME)-php npm run dev
+	docker exec -it $(COMPOSE_PROJECT_NAME)-php npm run dev
 
 run-prod: ## Run npm run prod
-	docker exec -it $(PROJECT_NAME)-php npm run prod
+	docker exec -it $(COMPOSE_PROJECT_NAME)-php npm run prod
 
 watch: ## Run npm run watch
-	docker exec -it $(PROJECT_NAME)-php npm run watch
+	docker exec -it $(COMPOSE_PROJECT_NAME)-php npm run watch
 
 
 ##@ Testing
 
 test: ## Run phpunit
-	docker exec -it -w /var/www/html $(PROJECT_NAME)-php ./vendor/bin/phpunit $$([[ -n "$(filter)" ]] && echo "--filter $(filter)")
+	docker exec -it -w /var/www/html $(COMPOSE_PROJECT_NAME)-php ./vendor/bin/phpunit $$([[ -n "$(filter)" ]] && echo "--filter $(filter)")
 
 
 ##@ Logging
@@ -71,16 +71,16 @@ logs: ## Show all logs
 	docker-compose logs --follow
 
 log-mysql: ## Show mysql logs
-	docker logs --follow --timestamps --tail=100 $(PROJECT_NAME)-mysql
+	docker logs --follow --timestamps --tail=100 $(COMPOSE_PROJECT_NAME)-mysql
 
 log-nginx: ## Show nginx logs
-	docker logs --follow --timestamps --tail=100 $(PROJECT_NAME)-nginx
+	docker logs --follow --timestamps --tail=100 $(COMPOSE_PROJECT_NAME)-nginx
 
 log-php: ## Show php logs
-	docker logs --follow --timestamps --tail=100 $(PROJECT_NAME)-php
+	docker logs --follow --timestamps --tail=100 $(COMPOSE_PROJECT_NAME)-php
 
 log-redis: ## Show redis logs
-	docker logs --follow --timestamps --tail=100 $(PROJECT_NAME)-redis
+	docker logs --follow --timestamps --tail=100 $(COMPOSE_PROJECT_NAME)-redis
 
 
 ##@ Removal
@@ -90,18 +90,18 @@ remove-all: down remove-image-all remove-volume-all ## Remove all project conati
 remove-image-all: remove-image-php remove-image-nginx ## Remove all project images
 
 remove-image-php: ## Remove project php image
-	docker image rm --force $(PROJECT_NAME)-php
+	docker image rm --force $(COMPOSE_PROJECT_NAME)-php
 
 remove-image-nginx: ## Remove project nginx image
-	docker image rm --force $(PROJECT_NAME)-nginx
+	docker image rm --force $(COMPOSE_PROJECT_NAME)-nginx
 
 remove-volume-all: remove-volume-mysql remove-volume-redis ## Remove all project volumes
 
 remove-volume-mysql: ## Remove project mysql volume
-	docker volume rm --force $(PROJECT_NAME)-mysql
+	docker volume rm --force $(COMPOSE_PROJECT_NAME)-mysql
 
 remove-volume-redis: ## Remove project redis volume
-	docker volume rm --force $(PROJECT_NAME)-redis
+	docker volume rm --force $(COMPOSE_PROJECT_NAME)-redis
 
 
 ##@ Helpers
