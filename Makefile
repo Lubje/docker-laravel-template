@@ -34,6 +34,9 @@ composer-install: ## Run composer install
 composer-install-dry: ## Run composer install --dry-run
 	docker exec $(PROJECT_NAME)-php composer install --dry-run
 
+composer-outdated: ## Run composer outdated
+	docker exec $(PROJECT_NAME)-php composer outdated
+
 composer-update: ## Run composer update
 	docker exec $(PROJECT_NAME)-php composer update
 
