@@ -127,7 +127,7 @@ case "$1" in
   down)
     addCommandForTarget host "docker-compose down" ;;
   ps)
-    addCommandForTarget host "docker ps" ;;
+    addCommandForTarget host "docker-compose ps" ;;
   restart)
     addCommandForTarget host "docker-compose restart" ;;
   stop)
