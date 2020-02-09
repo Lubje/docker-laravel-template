@@ -10,15 +10,11 @@ DEFAULT="\033[0m"
 MAIN="\033[32m"
 SUB="\033[33m"
 
+./develop.sh down
+
 read -p "Remove all Docker images for this project? (y/n) " -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-  printf "${MAIN}Removing: ${SUB}%s${DEFAULT}..\n" "${CONTAINER_PREFIX}"-mysql
-  docker image rm --force "${CONTAINER_PREFIX}"-mysql
-
-  printf "${MAIN}Removing: ${SUB}%s${DEFAULT}..\n" "${CONTAINER_PREFIX}"-redis
-  docker image rm --force "${CONTAINER_PREFIX}"-redis
-
   printf "${MAIN}Removing: ${SUB}%s${DEFAULT}..\n" "${CONTAINER_PREFIX}"-php
   docker image rm --force "${CONTAINER_PREFIX}"-php
 
