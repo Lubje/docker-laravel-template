@@ -79,12 +79,12 @@ if echo "${dockerResponse}" | grep -q "Is the docker daemon running?"; then
   exit 1
 fi
 
-packageIsInstalled () {
+composerPackageIsInstalled () {
   docker exec -it "${CONTAINER_PREFIX}"-php composer show | grep "$1" > /dev/null
 }
 
 exitIfComposerPackageIsNotInstalled () {
-  if ! packageIsInstalled "$1"; then
+  if ! composerPackageIsInstalled "$1"; then
     echo "Package $1 is not installed."
     exit 1
   fi
