@@ -30,8 +30,7 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
   printf "${CATEGORY}Composer\n"
   printf "${COMMAND}  install      ${SPACING}${DEFAULT}Install dependencies\n"
   printf "${COMMAND}  install-dry  ${SPACING}${DEFAULT}Fake install dependencies\n"
-  printf "${COMMAND}  list         ${SPACING}${DEFAULT}Fake install dependencies\n"
-  printf "${COMMAND}  outdated     ${SPACING}${DEFAULT}Fake install dependencies\n"
+  printf "${COMMAND}  outdated     ${SPACING}${DEFAULT}List outdated dependencies\n"
   printf "${COMMAND}  update       ${SPACING}${DEFAULT}Update dependencies\n"
   printf "${COMMAND}  update-dry   ${SPACING}${DEFAULT}Fake update dependencies\n\n"
 
@@ -50,10 +49,10 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
 
   printf "${CATEGORY}Logging\n"
   printf "${COMMAND}  logs         ${SPACING}${DEFAULT}Tail all logs\n"
-  printf "${COMMAND}  mysql        ${SPACING}${DEFAULT}Tail log from the mysql container\n"
-  printf "${COMMAND}  nginx        ${SPACING}${DEFAULT}Tail log from the nginx container\n"
-  printf "${COMMAND}  php          ${SPACING}${DEFAULT}Tail log from the php container\n"
-  printf "${COMMAND}  redis        ${SPACING}${DEFAULT}Tail log from the redis container\n\n"
+  printf "${COMMAND}  log-mysql    ${SPACING}${DEFAULT}Tail log from the mysql container\n"
+  printf "${COMMAND}  log-nginx    ${SPACING}${DEFAULT}Tail log from the nginx container\n"
+  printf "${COMMAND}  log-php      ${SPACING}${DEFAULT}Tail log from the php container\n"
+  printf "${COMMAND}  log-redis    ${SPACING}${DEFAULT}Tail log from the redis container\n\n"
 
   printf "${CATEGORY}Routes\n"
   printf "${COMMAND}  routes       ${SPACING}${DEFAULT}List all routes\n"
@@ -68,6 +67,7 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
   printf "${COMMAND}  unit         ${SPACING}${DEFAULT}Run unit tests, use optional 1st argument as filter-value\n\n"
 
   printf "${CATEGORY}Other\n"
+  printf "${COMMAND}  artisan      ${SPACING}${DEFAULT}List artisan commands\n"
   printf "${COMMAND}  bash|enter   ${SPACING}${DEFAULT}Run bash in the php container\n"
   printf "${COMMAND}  *            ${SPACING}${DEFAULT}Will be run in the php container\n"
   exit 0
@@ -84,6 +84,14 @@ addCommandForTarget () {
 }
 
 case "$1" in
+  # Assets
+  run-dev)
+    addCommandForTarget container "npm run dev" ;;
+  run-prod)
+    addCommandForTarget container "npm run prod" ;;
+  watch)
+    addCommandForTarget container "npm run watch" ;;
+
   # Cache
   cache)
     addCommandForTarget container "php artisan event:cache"
@@ -127,24 +135,16 @@ case "$1" in
   up)
     addCommandForTarget hots "docker-compose up -d" ;;
 
-  # Frontend
-  run-dev)
-    addCommandForTarget container "npm run dev" ;;
-  run-prod)
-    addCommandForTarget container "npm run prod" ;;
-  watch)
-    addCommandForTarget container "npm run watch" ;;
-
   # Logging
   logs)
     addCommandForTarget host "docker-compose logs --follow" ;;
-  mysql)
+  log-mysql)
     addCommandForTarget host "docker logs --follow --timestamps --tail=100 ${CONTAINER_PREFIX}-mysql" ;;
-  nginx)
+  log-nginx)
     addCommandForTarget host "docker logs --follow --timestamps --tail=100 ${CONTAINER_PREFIX}-nginx" ;;
-  php)
+  log-php)
     addCommandForTarget host "docker logs --follow --timestamps --tail=100 ${CONTAINER_PREFIX}-php" ;;
-  redis)
+  log-redis)
     addCommandForTarget host "docker logs --follow --timestamps --tail=100 ${CONTAINER_PREFIX}-redis" ;;
 
   # Routes
@@ -168,6 +168,8 @@ case "$1" in
     addCommandForTarget container "phpunit"$([[ $# -gt 1 ]] && echo " --filter ${*:2}") ;;
 
   # Other
+  artisan)
+    addCommandForTarget container "php artisan list" ;;
   bash|enter)
     addCommandForTarget container "bash" ;;
   *)
@@ -178,10 +180,10 @@ esac
 for ((i = 1; i <= ${#commands[@]}; i++))
 do
   # Run command on right target
-  if [[ ${targets[$i]} = "container" ]]; then
+  if [ "${targets[$i]}" == "container" ]; then
     # Report when container is not running
-    if [[ $(docker inspect -f '{{.State.Running}}' "${CONTAINER_PREFIX}"-php) == "false" ]]; then
-      echo "Container \"$CONTAINER_PREFIX-php\" is not running."
+    if [ "$(docker inspect -f '{{.State.Running}}' "${CONTAINER_PREFIX}"-php)" == "false" ]; then
+      echo Container \""${CONTAINER_PREFIX}"-php\" is not running.
       exit 1
     fi
     # Display actual command
