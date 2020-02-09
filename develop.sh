@@ -73,6 +73,13 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
   exit 0
 fi
 
+# Check is Docker is running
+dockerResponse=$(docker info --format '{{json .}}')
+if echo "${dockerResponse}" | grep -q "Is the docker daemon running?"; then
+  echo "Docker is not running."
+  exit 1
+fi
+
 declare -a targets
 declare -a commands
 commandCounter=0
@@ -181,9 +188,9 @@ for ((i = 1; i <= ${#commands[@]}; i++))
 do
   # Run command on right target
   if [ "${targets[$i]}" == "container" ]; then
-    # Report when container is not running
+    # Check if container is running
     if [ "$(docker inspect -f '{{.State.Running}}' "${CONTAINER_PREFIX}"-php)" == "false" ]; then
-      echo Container \""${CONTAINER_PREFIX}"-php\" is not running.
+      echo "Container \"${CONTAINER_PREFIX}-php\" is not running."
       exit 1
     fi
     # Display actual command
