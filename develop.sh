@@ -23,10 +23,6 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
   printf "${COMMAND}  run-prod     ${SPACING}${DEFAULT}Compile assets for production\n"
   printf "${COMMAND}  watch        ${SPACING}${DEFAULT}Run scripts from package.json when files change\n\n"
 
-  printf "${CATEGORY}Cache\n"
-  printf "${COMMAND}  cache        ${SPACING}${DEFAULT}Cache everything\n"
-  printf "${COMMAND}  clear        ${SPACING}${DEFAULT}Clear all the cache\n\n"
-
   printf "${CATEGORY}Composer\n"
   printf "${COMMAND}  install      ${SPACING}${DEFAULT}Install dependencies\n"
   printf "${COMMAND}  install-dry  ${SPACING}${DEFAULT}Fake install dependencies\n"
@@ -54,6 +50,10 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
   printf "${COMMAND}  log-php      ${SPACING}${DEFAULT}Tail log from the php container\n"
   printf "${COMMAND}  log-redis    ${SPACING}${DEFAULT}Tail log from the redis container\n\n"
 
+  printf "${CATEGORY}Optimization\n"
+  printf "${COMMAND}  cache        ${SPACING}${DEFAULT}Clear all the cache\n"
+  printf "${COMMAND}  helpers      ${SPACING}${DEFAULT}Create IDE autocompletion files\n\n"
+
   printf "${CATEGORY}Routes\n"
   printf "${COMMAND}  routes       ${SPACING}${DEFAULT}List all routes\n"
   printf "${COMMAND}  routes-get   ${SPACING}${DEFAULT}List all routes with GET methods\n"
@@ -73,12 +73,23 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
   exit 0
 fi
 
-# Check is Docker is running
+# Check if Docker is running
 dockerResponse=$(docker info --format '{{json .}}')
 if echo "${dockerResponse}" | grep -q "Is the docker daemon running?"; then
   echo "Docker is not running."
   exit 1
 fi
+
+packageIsInstalled () {
+  docker exec -it "${CONTAINER_PREFIX}"-php composer show | grep "$1" > /dev/null
+}
+
+exitIfComposerPackageIsNotInstalled () {
+  if ! packageIsInstalled "$1"; then
+    echo "Package $1 is not installed."
+    exit 1
+  fi
+}
 
 declare -a targets
 declare -a commands
@@ -98,15 +109,6 @@ case "$1" in
     addCommandForTarget container "npm run prod" ;;
   watch)
     addCommandForTarget container "npm run watch" ;;
-
-  # Cache
-  cache)
-    addCommandForTarget container "php artisan event:cache"
-    addCommandForTarget container "php artisan view:cache"
-    addCommandForTarget container "php artisan optimize" ;;
-  clear)
-    addCommandForTarget container "php artisan event:clear"
-    addCommandForTarget container "php artisan optimize:clear" ;;
 
   # Composer
   install)
@@ -154,6 +156,17 @@ case "$1" in
   log-redis)
     addCommandForTarget host "docker logs --follow --timestamps --tail=100 ${CONTAINER_PREFIX}-redis" ;;
 
+  # Optimization
+  clear)
+    addCommandForTarget container "php artisan event:clear"
+    addCommandForTarget container "php artisan optimize:clear" ;;
+  ide-helper)
+    exitIfComposerPackageIsNotInstalled barryvdh/laravel-ide-helper
+    addCommandForTarget container "php artisan clear-compiled"
+    addCommandForTarget container "php artisan ide-helper:generate --helpers"
+    addCommandForTarget container "php artisan ide-helper:models --nowrite"
+    addCommandForTarget container "php artisan ide-helper:meta" ;;
+
   # Routes
   routes)
     addCommandForTarget container "php artisan route:list" ;;
@@ -184,7 +197,7 @@ case "$1" in
 esac
 
 # Loop over the commands
-for ((i = 1; i <= ${#commands[@]}; i++))
+for (( i=1; i<=${#commands[@]}; i++ ))
 do
   # Run command on right target
   if [ "${targets[$i]}" == "container" ]; then
