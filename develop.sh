@@ -2,7 +2,6 @@
 
 # To add
 # - coverage (larastan)
-# - helpers (laravel ide helpers)
 
 # Get container-prefix from the docker-compose .env file
 COMPOSE_PROJECT_NAME="$(grep COMPOSE_PROJECT_NAME .env | xargs)"
