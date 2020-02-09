@@ -28,7 +28,7 @@ echo EXTERNAL_PORT_SUFFIX set to \""${port_suffix}"\" in the .env file.
 
 # Build the services
 echo Building the services..
-make up
+./develop.sh up
 
 # Remove the public directory, Laravel needs an empty directory for installation
 echo Removing the public directory to enable Laravel intallation..
@@ -36,18 +36,14 @@ rm -rf src/public
 
 # Install the latest Laravel version
 echo Installing the latest version of Laravel in /src:/var/www/html..
-docker exec "${project_name}"-php composer create-project --prefer-dist laravel/laravel /var/www/html
-
-# Run initial composer install
-echo Running initial composer install..
-docker exec "${project_name}"-php composer install
+./develop.sh composer create-project --prefer-dist laravel/laravel /var/www/html
 
 # Restart all the services
 echo Restarting the services..
-make restart
+./develop.sh restart
 
 # Display final instructions
-echo Now go to http://localhost:80"${port_suffix}" and edit your src/.env file as needed and run \"make\" to see the available commands.
+echo Now go to http://localhost:80"${port_suffix}" and edit your src/.env file as needed and run "./develop.sh help" to see the available commands.
 echo To enable Tailwind style authentication, run the following commands:
-echo 1. make bash
+echo 1. ./develop.sh bash
 echo 2. npx use-tailwind-preset
