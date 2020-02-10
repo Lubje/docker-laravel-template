@@ -180,11 +180,11 @@ case "$1" in
 
   # Testing
   feature)
-    addCommandForTarget container "phpunit tests/feature"$([[ $# -gt 1 ]] && echo " --filter ${*:2}") ;;
+    addCommandForTarget container "phpunit tests/feature$([[ $# -gt 1 ]] && echo " --filter ${*:2}")" ;;
   unit)
-    addCommandForTarget container "phpunit tests/unit"$([[ $# -gt 1 ]] && echo " --filter ${*:2}") ;;
+    addCommandForTarget container "phpunit tests/unit$([[ $# -gt 1 ]] && echo " --filter ${*:2}")" ;;
   tests)
-    addCommandForTarget container "phpunit"$([[ $# -gt 1 ]] && echo " --filter ${*:2}") ;;
+    addCommandForTarget container "phpunit$([[ $# -gt 1 ]] && echo " --filter ${*:2}")" ;;
 
   # Other
   artisan)
