@@ -26,6 +26,12 @@ read -r port_suffix
 echo "EXTERNAL_PORT_SUFFIX=""${port_suffix}" >> .env
 echo EXTERNAL_PORT_SUFFIX set to \""${port_suffix}"\" in the .env file.
 
+# Create the needed external network if it does not yet exists
+if [ ! "$(docker network ls | grep external)" ]; then
+  echo "Creating network 'external'.."
+  docker network create external
+fi
+
 # Build the services
 echo Building the services..
 ./develop.sh up
