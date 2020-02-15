@@ -57,7 +57,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   # Display final instructions
   printf "\n"
   printf "Your project is available at http://localhost:80%s\n" "${port_suffix}"
-  printf "Configure your src/.env file as needed and restart with './develop.sh restart'\n\n"
+  printf "Configure your 'src/.env' file as needed and restart with './develop.sh restart'\n\n"
 
   printf "For a list of available commands run './develop.sh'.\n\n"
 
