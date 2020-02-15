@@ -49,7 +49,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   rm .env
 
   printf "${MAIN}Removing folder: ${SUB}/src${DEFAULT}\n"
-  rm -rf /src
+  rm -rf src/
 
   printf "${MAIN}Project specific files have been removed.${DEFAULT}\n\n"
 
