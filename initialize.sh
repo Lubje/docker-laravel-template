@@ -36,13 +36,13 @@ fi
 echo Building the services..
 ./develop.sh up
 
-# Remove the public directory, Laravel needs an empty directory for installation
+# Remove the public directory. It will already exist in the Laravel project code base.
 rm -rf src/public
 
 printf "\n"
 
 # Ask confirmation to create a fresh Laravel project
-read -p "For a fresh Laravel project, press (y). For using your own existing repository, press (n)" -n 1 -r
+read -p "For a fresh Laravel project, press 'y'. For using one of your own repositories, press 'n'" -n 1 -r
 printf "\n"
 if [[ $REPLY =~ ^[Yy]$ ]]; then
   # Install the latest Laravel version
