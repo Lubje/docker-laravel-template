@@ -18,7 +18,7 @@ echo "COMPOSE_PROJECT_NAME=""${project_name}" >> .env
 echo COMPOSE_PROJECT_NAME set to \""${project_name}"\" in the .env file.
 
 # Ask for external port suffix number
-echo Enter a number to use as port-suffix and press enter, to make the external ports unique.
+echo Enter a number to use as port-suffix and press enter. We want to avoid port collisions with possible other services.
 echo For example, entering \"4\" will result in the following ports being used: 33064\(MySQL\), 63794\(Redis\), 804\(NGINX\).
 read -r port_suffix
 
@@ -37,19 +37,46 @@ echo Building the services..
 ./develop.sh up
 
 # Remove the public directory, Laravel needs an empty directory for installation
-echo Removing the public directory to enable Laravel intallation..
 rm -rf src/public
 
-# Install the latest Laravel version
-echo Installing the latest version of Laravel in /src:/var/www/html..
-./develop.sh composer create-project --prefer-dist laravel/laravel /var/www/html
+printf "\n"
 
-# Restart all the services
-echo Restarting the services..
-./develop.sh restart
+# Ask confirmation to create a fresh Laravel project
+read -p "For a fresh Laravel project, press (y). For using your own existing repository, press (n)" -n 1 -r
+printf "\n"
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+  # Install the latest Laravel version
+  printf "Installing the latest version of Laravel in /src:/var/www/html..\n"
+  ./develop.sh composer create-project --prefer-dist laravel/laravel /var/www/html
+
+  # Restart all the services
+  printf "\n"
+  printf "Restarting the services..\n"
+  ./develop.sh restart
+
+  # Display final instructions
+  printf "\n"
+  printf "Your project is available at http://localhost:80%s\n" "${port_suffix}"
+  printf "Configure your src/.env file as needed and restart with './develop.sh restart'\n\n"
+
+  printf "For a list of available commands run './develop.sh'.\n\n"
+
+  printf "To enable Tailwind based authentication scaffolding, run the following commands:\n"
+  printf "1. ./develop.sh bash\n"
+  printf "2. npx use-tailwind-preset\n"
+  exit 0
+fi
 
 # Display final instructions
-echo Now go to http://localhost:80"${port_suffix}" and edit your src/.env file as needed and run "./develop.sh help" to see the available commands.
-echo To enable Tailwind style authentication, run the following commands:
-echo 1. ./develop.sh bash
-echo 2. npx use-tailwind-preset
+printf "\n"
+printf "You can now clone your own Laravel project into the '/src' directory.\n\n"
+
+printf "After cloning, don't forget to:\n"
+printf "1. Create the .env file\n"
+printf "2. Generate the application key\n"
+printf "3. Install composer dependencies\n\n"
+
+printf "For a list of available commands run './develop.sh'.\n\n"
+
+printf "Your project will be available at http://localhost:80%s\n" "${port_suffix}"
+exit 0

@@ -12,34 +12,49 @@ SUB="\033[33m"
 
 ./develop.sh down
 
-read -p "Remove all Docker images for this project? (y/n) " -n 1 -r
-echo    # (optional) move to a new line
+printf "\n"
+
+read -p "Remove the PHP and NGINX Docker images for this project? (y/n)" -n 1 -r
+printf "\n"
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-  printf "${MAIN}Removing: ${SUB}%s${DEFAULT}..\n" "${CONTAINER_PREFIX}"-php
-  docker image rm --force "${CONTAINER_PREFIX}"-php
+  printf "${MAIN}Removing image: ${SUB}%s${DEFAULT}\n" "${CONTAINER_PREFIX}"-php
+  docker image rm --force "${CONTAINER_PREFIX}"-php > /dev/null
 
-  printf "${MAIN}Removing: ${SUB}%s${DEFAULT}..\n" "${CONTAINER_PREFIX}"-nginx
-  docker image rm --force "${CONTAINER_PREFIX}"-nginx
+  printf "${MAIN}Removing image: ${SUB}%s${DEFAULT}\n" "${CONTAINER_PREFIX}"-nginx
+  docker image rm --force "${CONTAINER_PREFIX}"-nginx > /dev/null
 
-  printf "${MAIN}The Docker images have been removed.${DEFAULT}\n"
+  printf "${MAIN}The Docker images have been removed.${DEFAULT}\n\n"
 else
-  printf "${SUB}The Docker images were preserved.${DEFAULT}\n"
+  printf "${SUB}The Docker images were preserved.${DEFAULT}\n\n"
 fi
 
-read -p "Remove corresponding Redis and MySQL volumes? (y/n) " -n 1 -r
-echo    # (optional) move to a new line
+read -p "Remove the Redis and MySQL Docker volumes for this project? (y/n)" -n 1 -r
+printf "\n"
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-  printf "${MAIN}Removing volume: ${SUB}%s${DEFAULT}..\n" "${CONTAINER_PREFIX}"-mysql
-  docker volume rm --force "${CONTAINER_PREFIX}"-mysql
+  printf "${MAIN}Removing volume: ${SUB}%s${DEFAULT}\n" "${CONTAINER_PREFIX}"-mysql
+  docker volume rm --force "${CONTAINER_PREFIX}"-mysql > /dev/null
 
-  printf "${MAIN}Removing volume: ${SUB}%s${DEFAULT}..\n" "${CONTAINER_PREFIX}"-redis
-  docker volume rm --force "${CONTAINER_PREFIX}"-redis
+  printf "${MAIN}Removing volume: ${SUB}%s${DEFAULT}\n" "${CONTAINER_PREFIX}"-redis
+  docker volume rm --force "${CONTAINER_PREFIX}"-redis > /dev/null
 
-  printf "${MAIN}The corresponding volumes have been removed.${DEFAULT}\n"
+  printf "${MAIN}The Docker volumes have been removed.${DEFAULT}\n\n"
 else
-  printf "${SUB}The corrseponding volumes were preserved.${DEFAULT}\n"
+  printf "${SUB}The Docker volumes were preserved.${DEFAULT}\n\n"
 fi
 
-echo All done.
+read -p "Remove the 'src' folder and the '.env' file? (y/n)" -n 1 -r
+printf "\n"
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+  printf "${MAIN}Removing file: ${SUB}.env${DEFAULT}\n"
+  rm .env
 
+  printf "${MAIN}Removing folder: ${SUB}/src${DEFAULT}\n"
+  rm -rf /src
+
+  printf "${MAIN}Project specific files have been removed.${DEFAULT}\n\n"
+
+  printf "You're free to run './initialize.sh' once again.\n\n"
+fi
+
+printf "All done.\n"
 exit 0
