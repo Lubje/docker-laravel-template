@@ -42,6 +42,10 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
   printf "${COMMAND}  stop         ${SPACING}${DEFAULT}Stop the containers\n"
   printf "${COMMAND}  up           ${SPACING}${DEFAULT}Start the containers\n\n"
 
+  printf "${CATEGORY}Inspection\n"
+  printf "${COMMAND}  cs|fixer     ${SPACING}${DEFAULT}Run PHP-CS-Fixer with --dry-run\n"
+  printf "${COMMAND}  larastan     ${SPACING}${DEFAULT}Run static analysis\n\n"
+
   printf "${CATEGORY}Logging\n"
   printf "${COMMAND}  logs         ${SPACING}${DEFAULT}Tail all logs\n"
   printf "${COMMAND}  log-mysql    ${SPACING}${DEFAULT}Tail log from the mysql container\n"
@@ -51,7 +55,7 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
 
   printf "${CATEGORY}Optimization\n"
   printf "${COMMAND}  cache|clear  ${SPACING}${DEFAULT}Clear all the cache\n"
-  printf "${COMMAND}  helpers      ${SPACING}${DEFAULT}Create IDE autocompletion files\n\n"
+  printf "${COMMAND}  ide-helper   ${SPACING}${DEFAULT}Create IDE autocompletion files\n\n"
 
   printf "${CATEGORY}Routes\n"
   printf "${COMMAND}  routes       ${SPACING}${DEFAULT}List all routes\n"
@@ -142,6 +146,12 @@ case "$1" in
     addCommandForTarget host "docker-compose stop" ;;
   up)
     addCommandForTarget hots "docker-compose up -d" ;;
+
+  # Inspection
+  cs|fixer)
+    addCommandForTarget container "/usr/local/bin/php-cs-fixer fix --dry-run --diff" ;;
+  larastan)
+    addCommandForTarget container "./vendor/bin/phpstan analyse" ;;
 
   # Logging
   logs)
