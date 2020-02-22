@@ -67,7 +67,7 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
 
   printf "${CATEGORY}Testing\n"
   printf "${COMMAND}  feature      ${SPACING}${DEFAULT}Run feature tests, use optional 1st argument as filter-value\n"
-  printf "${COMMAND}  tests        ${SPACING}${DEFAULT}Run all tests, use optional 1st argument as filter-value\n"
+  printf "${COMMAND}  test|tests   ${SPACING}${DEFAULT}Run all tests, use optional 1st argument as filter-value\n"
   printf "${COMMAND}  unit         ${SPACING}${DEFAULT}Run unit tests, use optional 1st argument as filter-value\n\n"
 
   printf "${CATEGORY}Other\n"
@@ -196,7 +196,7 @@ case "$1" in
     addCommandForTarget container "phpunit --testsuite Feature$([[ $# -gt 1 ]] && echo " --filter ${*:2}")" ;;
   unit)
     addCommandForTarget container "phpunit --testsuite Unit$([[ $# -gt 1 ]] && echo " --filter ${*:2}")" ;;
-  tests)
+  test|tests)
     addCommandForTarget container "phpunit$([[ $# -gt 1 ]] && echo " --filter ${*:2}")" ;;
 
   # Other
