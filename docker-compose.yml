@@ -19,7 +19,7 @@ services:
       MYSQL_DATABASE: ${COMPOSE_PROJECT_NAME}_local
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: user
-      MYSQL_PASSWORD: secret
+      MYSQL_PASSWORD: password
     image: mysql:${MYSQL_VERSION:-8.0}
     networks:
       - internal
