@@ -35,7 +35,8 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
   printf "${COMMAND}  build        ${SPACING}${DEFAULT}Build the images\n"
   printf "${COMMAND}  down         ${SPACING}${DEFAULT}Stop and remove the containers\n"
   printf "${COMMAND}  ps           ${SPACING}${DEFAULT}List the containers\n"
-  printf "${COMMAND}  restart      ${SPACING}${DEFAULT}Stop and start the containers\n"
+  printf "${COMMAND}  restart      ${SPACING}${DEFAULT}Stop and restart the containers\n"
+  printf "${COMMAND}  restart-down ${SPACING}${DEFAULT}Down and restart the containers\n"
   printf "${COMMAND}  stop         ${SPACING}${DEFAULT}Stop the containers\n"
   printf "${COMMAND}  up           ${SPACING}${DEFAULT}Start the containers\n\n"
 
@@ -148,6 +149,9 @@ case "$1" in
     addCommandForTarget host "docker-compose ps" ;;
   restart)
     addCommandForTarget host "docker-compose restart" ;;
+  restart-down)
+    addCommandForTarget host "docker-compose down"
+    addCommandForTarget host "docker-compose up -d" ;;
   stop)
     addCommandForTarget host "docker-compose stop" ;;
   up)
