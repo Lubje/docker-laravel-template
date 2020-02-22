@@ -50,7 +50,7 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
   printf "${COMMAND}  log-redis    ${SPACING}${DEFAULT}Tail log from the redis container\n\n"
 
   printf "${CATEGORY}Optimization\n"
-  printf "${COMMAND}  cache        ${SPACING}${DEFAULT}Clear all the cache\n"
+  printf "${COMMAND}  cache|clear  ${SPACING}${DEFAULT}Clear all the cache\n"
   printf "${COMMAND}  helpers      ${SPACING}${DEFAULT}Create IDE autocompletion files\n\n"
 
   printf "${CATEGORY}Routes\n"
@@ -156,7 +156,7 @@ case "$1" in
     addCommandForTarget host "docker logs --follow --timestamps --tail=100 ${CONTAINER_PREFIX}-redis" ;;
 
   # Optimization
-  clear)
+  cache|clear)
     addCommandForTarget container "php artisan event:clear"
     addCommandForTarget container "php artisan optimize:clear" ;;
   ide-helper)
