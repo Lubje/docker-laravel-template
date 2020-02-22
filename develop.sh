@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# To add
-# - coverage (larastan)
-
 # Get container-prefix from the docker-compose .env file
 COMPOSE_PROJECT_NAME="$(grep COMPOSE_PROJECT_NAME .env | xargs)"
 IFS='=' read -ra COMPOSE_PROJECT_NAME <<< "$COMPOSE_PROJECT_NAME"
