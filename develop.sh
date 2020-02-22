@@ -36,8 +36,8 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
   printf "${COMMAND}  build|rebuild${SPACING}${DEFAULT}Build the images without cache\n"
   printf "${COMMAND}  down         ${SPACING}${DEFAULT}Stop and remove the containers\n"
   printf "${COMMAND}  ps           ${SPACING}${DEFAULT}List the containers\n"
-  printf "${COMMAND}  restart      ${SPACING}${DEFAULT}Stop and restart the containers\n"
-  printf "${COMMAND}  restart-down ${SPACING}${DEFAULT}Down and restart the containers\n"
+  printf "${COMMAND}  restart      ${SPACING}${DEFAULT}Restart the containers\n"
+  printf "${COMMAND}  restart-down ${SPACING}${DEFAULT}Restart the containers using down\n"
   printf "${COMMAND}  stop         ${SPACING}${DEFAULT}Stop the containers\n"
   printf "${COMMAND}  up           ${SPACING}${DEFAULT}Start the containers\n\n"
 
