@@ -88,7 +88,15 @@ composerPackageIsInstalled () {
   docker exec -it "${CONTAINER_PREFIX}"-php composer show | grep "$1" > /dev/null
 }
 
+exitIfPhpContainerIsNotRunning () {
+  if [ ! "$(docker ps -q -f name="${CONTAINER_PREFIX}"-php)" ] || [ "$(docker inspect -f '{{.State.Running}}' "${CONTAINER_PREFIX}"-php)" == "false" ]; then
+      echo "Container '${CONTAINER_PREFIX}-php' is not up and running."
+      exit 1
+  fi
+}
+
 exitIfComposerPackageIsNotInstalled () {
+  exitIfPhpContainerIsNotRunning
   if ! composerPackageIsInstalled "$1"; then
     echo "Package $1 is not installed."
     exit 1
@@ -154,6 +162,7 @@ case "$1" in
   cs|fixer)
     addCommandForTarget container "/usr/local/bin/php-cs-fixer fix --dry-run --diff" ;;
   larastan)
+    exitIfComposerPackageIsNotInstalled nunomaduro/larastan
     addCommandForTarget container "./vendor/bin/phpstan analyse" ;;
 
   # Logging
@@ -213,11 +222,8 @@ for (( i=1; i<=${#commands[@]}; i++ ))
 do
   # Run command on right target
   if [ "${targets[$i]}" == "container" ]; then
-    # Check if container is running
-    if [ "$(docker inspect -f '{{.State.Running}}' "${CONTAINER_PREFIX}"-php)" == "false" ]; then
-      echo "Container \"${CONTAINER_PREFIX}-php\" is not running."
-      exit 1
-    fi
+    # Check if PHP container is up and running
+    exitIfPhpContainerIsNotRunning
     # Display actual command
     printf "${CATEGORY}Executing: ${DEFAULT}docker exec -it ${CONTAINER_PREFIX}-php %s\n" "${commands[$i]}"
     # Execute command
