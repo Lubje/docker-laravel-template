@@ -28,6 +28,7 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
 
   printf "${CATEGORY}Database\n"
   printf "${COMMAND}  fresh|refresh${SPACING}${DEFAULT}Drop all tables and re-run all migrations\n"
+  printf "${COMMAND}  fresh-seed   ${SPACING}${DEFAULT}Drop all tables, re-run all migrations and seeders\n"
   printf "${COMMAND}  migrate      ${SPACING}${DEFAULT}Run the database migrations\n"
   printf "${COMMAND}  seed         ${SPACING}${DEFAULT}Seed the database with records\n\n"
 
@@ -135,6 +136,9 @@ case "$1" in
   # Database
   fresh|refresh)
     addCommandForTarget container "php artisan migrate:fresh" ;;
+  fresh-seed)
+    addCommandForTarget container "php artisan migrate:fresh"
+    addCommandForTarget container "php artisan db:seed" ;;
   migrate)
     addCommandForTarget container "php artisan migrate" ;;
   seed)
