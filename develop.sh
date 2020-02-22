@@ -32,7 +32,7 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
   printf "${COMMAND}  seed         ${SPACING}${DEFAULT}Seed the database with records\n\n"
 
   printf "${CATEGORY}Docker\n"
-  printf "${COMMAND}  build        ${SPACING}${DEFAULT}Build the images\n"
+  printf "${COMMAND}  build|rebuild${SPACING}${DEFAULT}Build the images without cache\n"
   printf "${COMMAND}  down         ${SPACING}${DEFAULT}Stop and remove the containers\n"
   printf "${COMMAND}  ps           ${SPACING}${DEFAULT}List the containers\n"
   printf "${COMMAND}  restart      ${SPACING}${DEFAULT}Stop and restart the containers\n"
@@ -141,7 +141,7 @@ case "$1" in
     addCommandForTarget container "php artisan db:seed" ;;
 
   # Docker
-  build)
+  build|rebuild)
     addCommandForTarget host "docker-compose build --no-cache" ;;
   down)
     addCommandForTarget host "docker-compose down" ;;
