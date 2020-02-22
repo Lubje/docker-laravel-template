@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Check if Docker is running
+dockerResponse=$(docker info --format '{{json .}}')
+if echo "${dockerResponse}" | grep -q "Is the docker daemon running?"; then
+  echo "Docker is not running."
+  exit 1
+fi
+
 # Get container-prefix from the docker-compose .env file
 COMPOSE_PROJECT_NAME="$(grep COMPOSE_PROJECT_NAME .env | xargs)"
 IFS='=' read -ra COMPOSE_PROJECT_NAME <<< "$COMPOSE_PROJECT_NAME"

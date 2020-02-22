@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Check if Docker is running
+dockerResponse=$(docker info --format '{{json .}}')
+if echo "${dockerResponse}" | grep -q "Is the docker daemon running?"; then
+  echo "Docker is not running."
+  exit 1
+fi
+
 # Check if .env file already exists
 ENV_FILE=.env
 if [ -f "$ENV_FILE" ]; then
