@@ -58,7 +58,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   printf "${MAIN}Removing folder: ${SUB}/src${DEFAULT}\n"
   rm -rf src/
 
-  printf "${MAIN}Project specific files have been removed.${DEFAULT}\n\n"
+  printf "${MAIN}The project specific files have been removed.${DEFAULT}\n\n"
 
   printf "You're free to run './initialize.sh' once again.\n\n"
 fi
