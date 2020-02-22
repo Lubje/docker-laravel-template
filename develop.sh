@@ -74,7 +74,7 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
   exit 0
 fi
 
-# Check if Docker is running
+# Exit if the Docker daemon is not running
 dockerResponse=$(docker info --format '{{json .}}')
 if echo "${dockerResponse}" | grep -q "Is the docker daemon running?"; then
   echo "Docker is not running."

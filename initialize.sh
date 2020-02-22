@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Check if Docker is running
+# Exit if the Docker daemon is not running
 dockerResponse=$(docker info --format '{{json .}}')
 if echo "${dockerResponse}" | grep -q "Is the docker daemon running?"; then
-  echo "Docker is not running."
+  echo "The Docker daemon is not running."
   exit 1
 fi
 
