@@ -42,7 +42,7 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
   printf "${COMMAND}  up           ${SPACING}${DEFAULT}Start the containers\n\n"
 
   printf "${CATEGORY}Inspection\n"
-  printf "${COMMAND}  coverage     ${SPACING}${DEFAULT}Run PHPunit code coverage analysis with Xdebug\n"
+  printf "${COMMAND}  coverage     ${SPACING}${DEFAULT}Run PHPunit code coverage analysis with PCOV\n"
   printf "${COMMAND}  cs|fixer     ${SPACING}${DEFAULT}Run PHP-CS-Fixer with --dry-run\n"
   printf "${COMMAND}  larastan     ${SPACING}${DEFAULT}Run static analysis\n\n"
 

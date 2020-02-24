@@ -51,7 +51,7 @@ services:
       - mysql
       - redis
     environment:
-      PHP_EXTENSION_XDEBUG: 1
+      PHP_EXTENSION_PCOV: 1
     image: ${COMPOSE_PROJECT_NAME}-php
     networks:
       - internal
