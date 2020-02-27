@@ -8,10 +8,9 @@ if echo "${dockerResponse}" | grep -q "Is the docker daemon running?"; then
 fi
 
 # Check if .env file already exists
-ENV_FILE=.env
-if [ -f "$ENV_FILE" ]; then
-    echo "Error: $ENV_FILE already exists!"
-    exit 0
+if [ -f ".env" ]; then
+    echo "Error: '.env' file already exists!"
+    exit 1
 fi
 
 # Create src/public folder needed for volume mounting in docker-compose file
@@ -22,7 +21,7 @@ project_name=${PWD##*/}
 
 # Set project name in the .env file
 echo "COMPOSE_PROJECT_NAME=""${project_name}" >> .env
-echo COMPOSE_PROJECT_NAME set to \""${project_name}"\" in the .env file.
+printf "COMPOSE_PROJECT_NAME set to \"%s\" in the .env file.\n" "${project_name}"
 
 # Ask for external port suffix number
 echo Enter a number to use as port-suffix and press enter. We want to avoid port collisions with possible other services.
@@ -31,7 +30,7 @@ read -r port_suffix
 
 # Set the chosen port suffix in the .env file
 echo "EXTERNAL_PORT_SUFFIX=""${port_suffix}" >> .env
-echo EXTERNAL_PORT_SUFFIX set to \""${port_suffix}"\" in the .env file.
+printf "EXTERNAL_PORT_SUFFIX set to \"%s\" in the .env file.\n" "${port_suffix}"
 
 # Create the needed external network if it does not yet exists
 if [ ! "$(docker network ls | grep external)" ]; then
