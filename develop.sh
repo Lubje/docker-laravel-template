@@ -55,9 +55,8 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
 
   printf "${CATEGORY}Routes\n"
   printf "${COMMAND}  routes       ${SPACING}${DEFAULT}List all routes\n"
-  printf "${COMMAND}  routes-get   ${SPACING}${DEFAULT}List all routes with GET methods\n"
+  printf "${COMMAND}  routes-method${SPACING}${DEFAULT}List routes filtered by method use 1st argument as filter-value\n"
   printf "${COMMAND}  routes-name  ${SPACING}${DEFAULT}List routes filtered by name, use 1st argument as filter-value\n"
-  printf "${COMMAND}  routes-post  ${SPACING}${DEFAULT}List all routes with POST methods\n"
   printf "${COMMAND}  routes-path  ${SPACING}${DEFAULT}List routes filtered by path, use 1st argument as filter-value\n\n"
 
   printf "${CATEGORY}Testing for Laravel version < 7\n"
@@ -189,13 +188,11 @@ case "$1" in
   # Routes
   routes)
     addCommandForTarget container "php artisan route:list" ;;
-  routes-get)
-    addCommandForTarget container "php artisan route:list --method=GET" ;;
+  routes-method)
+    addCommandForTarget container "php artisan route:list --method=$2" ;;
   routes-name)
     addCommandForTarget container "php artisan route:list --name=$2" ;;
-  routes-post)
-    addCommandForTarget container "php artisan route:list --method=POST" ;;
-  routes-path)
+  routes-path|routes-uri)
     addCommandForTarget container "php artisan route:list --path=$2" ;;
 
   # Testing for Laravel version < 7
