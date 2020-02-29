@@ -250,7 +250,7 @@ do
     # Display actual command
     printf "${CATEGORY}Executing: ${DEFAULT}%s\n" "${commands[$i]}"
     # Execute command
-    eval ${commands[$i]}
+    ${commands[$i]}
   fi
 done
 
