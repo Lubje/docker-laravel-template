@@ -47,11 +47,7 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
   printf "${COMMAND}  larastan     ${SPACING}${DEFAULT}Run static analysis\n\n"
 
   printf "${CATEGORY}Logging\n"
-  printf "${COMMAND}  logs         ${SPACING}${DEFAULT}Tail all logs\n"
-  printf "${COMMAND}  log-mysql    ${SPACING}${DEFAULT}Tail log from the mysql container\n"
-  printf "${COMMAND}  log-nginx    ${SPACING}${DEFAULT}Tail log from the nginx container\n"
-  printf "${COMMAND}  log-php      ${SPACING}${DEFAULT}Tail log from the php container\n"
-  printf "${COMMAND}  log-redis    ${SPACING}${DEFAULT}Tail log from the redis container\n\n"
+  printf "${COMMAND}  log|logs     ${SPACING}${DEFAULT}Tail logs, use optional 1st argument to specify a service (mysql,nginx,php,redis)\n\n"
 
   printf "${CATEGORY}Optimization\n"
   printf "${COMMAND}  cache|clear  ${SPACING}${DEFAULT}Clear all the cache\n"
@@ -176,16 +172,8 @@ case "$1" in
     addCommandForTarget container "./vendor/bin/phpstan analyse" ;;
 
   # Logging
-  logs)
-    addCommandForTarget host "docker-compose logs --follow" ;;
-  log-mysql)
-    addCommandForTarget host "docker logs --follow --timestamps --tail=100 ${CONTAINER_PREFIX}-mysql" ;;
-  log-nginx)
-    addCommandForTarget host "docker logs --follow --timestamps --tail=100 ${CONTAINER_PREFIX}-nginx" ;;
-  log-php)
-    addCommandForTarget host "docker logs --follow --timestamps --tail=100 ${CONTAINER_PREFIX}-php" ;;
-  log-redis)
-    addCommandForTarget host "docker logs --follow --timestamps --tail=100 ${CONTAINER_PREFIX}-redis" ;;
+  log|logs)
+    addCommandForTarget host "docker-compose logs --follow --timestamps --tail=100 $([[ $# -gt 1 ]] && echo "$2")" ;;
 
   # Optimization
   cache|clear)
