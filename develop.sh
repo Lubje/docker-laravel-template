@@ -155,16 +155,16 @@ case "$1" in
   down)
     addCommandForTarget host "docker-compose down" ;;
   ps)
-    addCommandForTarget host "docker-compose ps" ;;
+    addCommandForTarget host "docker-compose ps --all" ;;
   restart)
     addCommandForTarget host "docker-compose restart" ;;
   restart-down)
     addCommandForTarget host "docker-compose down"
-    addCommandForTarget host "docker-compose up -d" ;;
+    addCommandForTarget host "docker-compose up --detach" ;;
   stop)
     addCommandForTarget host "docker-compose stop" ;;
   up)
-    addCommandForTarget hots "docker-compose up -d" ;;
+    addCommandForTarget hots "docker-compose up --detach" ;;
 
   # Inspection
   coverage)
@@ -250,7 +250,7 @@ do
     # Display actual command
     printf "${CATEGORY}Executing: ${DEFAULT}%s\n" "${commands[$i]}"
     # Execute command
-    ${commands[$i]}
+    eval ${commands[$i]}
   fi
 done
 
