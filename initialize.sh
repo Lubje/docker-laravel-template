@@ -68,8 +68,16 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   printf "For a list of available commands run './develop.sh'.\n\n"
 
   printf "To enable Tailwind based authentication scaffolding, run the following commands:\n"
+
   printf "1. ./develop.sh bash\n"
-  printf "2. npx use-tailwind-preset\n"
+  printf "2. composer require laravel-frontend-presets/tailwindcss --dev\n"
+  printf "3. php artisan ui tailwindcss --auth\n"
+  printf "4. npm install && npm run dev\n"
+  printf "5. php artisan migrate\n"
+
+#  printf "1. ./develop.sh bash\n"
+#  printf "2. npx use-tailwind-preset\n"
+
   exit 0
 fi
 
