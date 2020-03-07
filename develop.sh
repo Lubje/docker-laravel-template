@@ -165,10 +165,11 @@ case "$1" in
   coverage)
     addCommandForTarget container "phpunit --coverage-text" ;;
   cs|fixer)
-    addCommandForTarget container "/usr/local/bin/php-cs-fixer fix --dry-run --diff" ;;
+    exitIfComposerPackageIsNotInstalled friendsofphp/php-cs-fixer
+    addCommandForTarget container "php-cs-fixer fix --dry-run --diff" ;;
   larastan)
     exitIfComposerPackageIsNotInstalled nunomaduro/larastan
-    addCommandForTarget container "./vendor/bin/phpstan analyse" ;;
+    addCommandForTarget container "phpstan analyse" ;;
 
   # Logging
   log|logs)
