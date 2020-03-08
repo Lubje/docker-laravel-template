@@ -43,7 +43,8 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
 
   printf "${CATEGORY}Inspection\n"
   printf "${COMMAND}  coverage     ${SPACING}${DEFAULT}Run PHPunit code coverage analysis with PCOV\n"
-  printf "${COMMAND}  cs|fixer     ${SPACING}${DEFAULT}Run PHP-CS-Fixer with --dry-run\n"
+  printf "${COMMAND}  cs           ${SPACING}${DEFAULT}Show codestyle issues with PHP-CS-Fixer\n"
+  printf "${COMMAND}  fix          ${SPACING}${DEFAULT}Fix codestyle issues with PHP-CS-Fixer\n"
   printf "${COMMAND}  larastan     ${SPACING}${DEFAULT}Run static analysis\n\n"
 
   printf "${CATEGORY}Logging\n"
@@ -164,9 +165,12 @@ case "$1" in
   # Inspection
   coverage)
     addCommandForTarget container "phpunit --coverage-text" ;;
-  cs|fixer)
+  cs)
     exitIfComposerPackageIsNotInstalled friendsofphp/php-cs-fixer
     addCommandForTarget container "php-cs-fixer fix --dry-run --diff" ;;
+  fix)
+    exitIfComposerPackageIsNotInstalled friendsofphp/php-cs-fixer
+    addCommandForTarget container "php-cs-fixer fix" ;;
   larastan)
     exitIfComposerPackageIsNotInstalled nunomaduro/larastan
     addCommandForTarget container "phpstan analyse" ;;
