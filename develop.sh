@@ -45,7 +45,7 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
   printf "${COMMAND}  coverage     ${SPACING}${DEFAULT}Run PHPunit code coverage analysis with PCOV\n"
   printf "${COMMAND}  cs           ${SPACING}${DEFAULT}Show codestyle issues with PHP-CS-Fixer\n"
   printf "${COMMAND}  fix          ${SPACING}${DEFAULT}Fix codestyle issues with PHP-CS-Fixer\n"
-  printf "${COMMAND}  larastan     ${SPACING}${DEFAULT}Run static analysis\n\n"
+  printf "${COMMAND}  stan         ${SPACING}${DEFAULT}Run static analysis with larastan\n\n"
 
   printf "${CATEGORY}Logging\n"
   printf "${COMMAND}  log|logs     ${SPACING}${DEFAULT}Tail logs, use optional 1st argument to specify a service (mysql,nginx,php,redis)\n\n"
@@ -171,7 +171,7 @@ case "$1" in
   fix)
     exitIfComposerPackageIsNotInstalled friendsofphp/php-cs-fixer
     addCommandForTarget container "php-cs-fixer fix" ;;
-  larastan)
+  stan)
     exitIfComposerPackageIsNotInstalled nunomaduro/larastan
     addCommandForTarget container "phpstan analyse" ;;
 
