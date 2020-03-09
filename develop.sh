@@ -164,7 +164,7 @@ case "$1" in
 
   # Inspection
   coverage)
-    addCommandForTarget container "phpunit --coverage-text" ;;
+    addCommandForTarget container "phpunit --coverage-text --printer PHPUnit\TextUI\ResultPrinter" ;;
   cs)
     exitIfComposerPackageIsNotInstalled friendsofphp/php-cs-fixer
     addCommandForTarget container "php-cs-fixer fix --dry-run --diff" ;;
