@@ -60,12 +60,7 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
   printf "${COMMAND}  routes-name  ${SPACING}${DEFAULT}List routes filtered by name, use 1st argument as filter-value\n"
   printf "${COMMAND}  routes-path  ${SPACING}${DEFAULT}List routes filtered by path, use 1st argument as filter-value\n\n"
 
-  printf "${CATEGORY}Testing for Laravel version < 7\n"
-  printf "${COMMAND}  feature6     ${SPACING}${DEFAULT}Run feature tests, use optional 1st argument as filter-value\n"
-  printf "${COMMAND}  test6|tests6 ${SPACING}${DEFAULT}Run all tests, use optional 1st argument as filter-value\n"
-  printf "${COMMAND}  unit6        ${SPACING}${DEFAULT}Run unit tests, use optional 1st argument as filter-value\n\n"
-
-  printf "${CATEGORY}Testing for Laravel version >= 7\n"
+  printf "${CATEGORY}Testing\n"
   printf "${COMMAND}  feature      ${SPACING}${DEFAULT}Run feature tests, use optional 1st argument as filter-value\n"
   printf "${COMMAND}  test|tests   ${SPACING}${DEFAULT}Run all tests, use optional 1st argument as filter-value\n"
   printf "${COMMAND}  unit         ${SPACING}${DEFAULT}Run unit tests, use optional 1st argument as filter-value\n\n"
@@ -200,21 +195,13 @@ case "$1" in
   routes-path|routes-uri)
     addCommandForTarget container "php artisan route:list --path=$2" ;;
 
-  # Testing for Laravel version < 7
-  feature6)
-    addCommandForTarget container "phpunit --testsuite Feature$([[ $# -gt 1 ]] && echo " --filter ${*:2}")" ;;
-  unit6)
-    addCommandForTarget container "phpunit --testsuite Unit$([[ $# -gt 1 ]] && echo " --filter ${*:2}")" ;;
-  test6|tests6)
-    addCommandForTarget container "phpunit$([[ $# -gt 1 ]] && echo " --filter ${*:2}")" ;;
-
-  # Testing for Laravel >= 7
+  # Testing
   feature)
-    addCommandForTarget container "php artisan test --testsuite Feature$([[ $# -gt 1 ]] && echo " --filter ${*:2}")" ;;
+    addCommandForTarget container "phpunit --testsuite Feature$([[ $# -gt 1 ]] && echo " --filter ${*:2}")" ;;
   unit)
-    addCommandForTarget container "php artisan test --testsuite Unit$([[ $# -gt 1 ]] && echo " --filter ${*:2}")" ;;
+    addCommandForTarget container "phpunit --testsuite Unit$([[ $# -gt 1 ]] && echo " --filter ${*:2}")" ;;
   test|tests)
-    addCommandForTarget container "php artisan test$([[ $# -gt 1 ]] && echo " --filter ${*:2}")" ;;
+    addCommandForTarget container "phpunit$([[ $# -gt 1 ]] && echo " --filter ${*:2}")" ;;
 
   # Other
   artisan)
