@@ -75,9 +75,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   printf "3. php artisan ui tailwindcss --auth\n"
   printf "4. npm install && npm run dev\n"
   printf "5. php artisan migrate\n"
-
-#  printf "1. ./develop.sh bash\n"
-#  printf "2. npx use-tailwind-preset\n"
+  printf "6. composer remove laravel-frontend-presets/tailwindcss --dev\n"
 
   exit 0
 fi
