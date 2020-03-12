@@ -40,6 +40,7 @@ fi
 
 # Build the services
 echo Building the services..
+./develop.sh build
 ./develop.sh up
 
 # Remove the public directory. It will already exist in the Laravel project code base.
@@ -58,7 +59,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   # Restart all the services
   printf "\n"
   printf "Restarting the services..\n"
-  ./develop.sh restart
+  ./develop.sh restart-down
 
   # Display final instructions
   printf "\n"
