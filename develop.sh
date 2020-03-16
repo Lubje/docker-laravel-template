@@ -80,7 +80,7 @@ if echo "${dockerResponse}" | grep -q "Is the docker daemon running?"; then
 fi
 
 composerPackageIsInstalled () {
-  docker exec -it "${CONTAINER_PREFIX}"-php composer show | grep "$1" > /dev/null
+  docker exec "${CONTAINER_PREFIX}"-php composer show | grep "$1" > /dev/null
 }
 
 exitIfPhpContainerIsNotRunning () {
@@ -95,6 +95,18 @@ exitIfComposerPackageIsNotInstalled () {
   if ! composerPackageIsInstalled "$1"; then
     echo "Package $1 is not installed."
     exit 1
+  fi
+}
+
+getLaravelMainVersion () {
+  echo "$(docker exec "${CONTAINER_PREFIX}"-php php artisan --version | awk '{print $3}' | cut -d . -f1)"
+}
+
+getTestBaseCommandForLaravelMainVersion () {
+  if [[ $(getLaravelMainVersion) -ge 7 ]]; then
+    echo "php artisan test"
+  else
+    echo "phpunit"
   fi
 }
 
@@ -197,11 +209,11 @@ case "$1" in
 
   # Testing
   feature)
-    addCommandForTarget container "phpunit --testsuite Feature$([[ $# -gt 1 ]] && echo " --filter ${*:2}")" ;;
+    addCommandForTarget container "$(getTestBaseCommandForLaravelMainVersion) --testsuite Feature$([[ $# -gt 1 ]] && echo " --filter ${*:2}")" ;;
   unit)
-    addCommandForTarget container "phpunit --testsuite Unit$([[ $# -gt 1 ]] && echo " --filter ${*:2}")" ;;
+    addCommandForTarget container "$(getTestBaseCommandForLaravelMainVersion) --testsuite Unit$([[ $# -gt 1 ]] && echo " --filter ${*:2}")" ;;
   test|tests)
-    addCommandForTarget container "phpunit$([[ $# -gt 1 ]] && echo " --filter ${*:2}")" ;;
+    addCommandForTarget container "$(getTestBaseCommandForLaravelMainVersion)$([[ $# -gt 1 ]] && echo " --filter ${*:2}")" ;;
 
   # Other
   artisan)
@@ -222,7 +234,7 @@ do
     # Display actual command
     printf "${CATEGORY}Executing: ${DEFAULT}docker exec -it ${CONTAINER_PREFIX}-php %s\n" "${commands[$i]}"
     # Execute command
-    docker exec -it "${CONTAINER_PREFIX}"-php ${commands[$i]}
+    docker exec -t "${CONTAINER_PREFIX}"-php ${commands[$i]}
   else
     # Display actual command
     printf "${CATEGORY}Executing: ${DEFAULT}%s\n" "${commands[$i]}"
