@@ -234,7 +234,7 @@ do
     # Display actual command
     printf "${CATEGORY}Executing: ${DEFAULT}docker exec -it ${CONTAINER_PREFIX}-php %s\n" "${commands[$i]}"
     # Execute command
-    docker exec -t "${CONTAINER_PREFIX}"-php ${commands[$i]}
+    docker exec -it "${CONTAINER_PREFIX}"-php ${commands[$i]}
   else
     # Display actual command
     printf "${CATEGORY}Executing: ${DEFAULT}%s\n" "${commands[$i]}"
