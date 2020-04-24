@@ -15,17 +15,20 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
   printf "${DEFAULT}Use ./develop.sh ${COMMAND}<command>${DEFAULT}\n\n"
 
   printf "${DEFAULT}Available ${COMMAND}commands${DEFAULT} per ${CATEGORY}category${DEFAULT}:\n"
-  printf "${CATEGORY} Assets\n"
+  printf "${CATEGORY} Npm\n"
+  printf "${COMMAND}  n-install    ${SPACING}${DEFAULT}Install npm dependencies\n"
+  printf "${COMMAND}  n-outdated   ${SPACING}${DEFAULT}Show outdated npm dependencies\n"
+  printf "${COMMAND}  n-update     ${SPACING}${DEFAULT}Update npm dependencies\n"
   printf "${COMMAND}  run-dev      ${SPACING}${DEFAULT}Compile assets for development\n"
   printf "${COMMAND}  run-prod     ${SPACING}${DEFAULT}Compile assets for production\n"
   printf "${COMMAND}  watch        ${SPACING}${DEFAULT}Run scripts from package.json when files change\n"
 
   printf "${CATEGORY} Composer\n"
-  printf "${COMMAND}  install      ${SPACING}${DEFAULT}Install dependencies\n"
-  printf "${COMMAND}  install-dry  ${SPACING}${DEFAULT}Fake install dependencies\n"
-  printf "${COMMAND}  outdated     ${SPACING}${DEFAULT}List outdated dependencies\n"
-  printf "${COMMAND}  update       ${SPACING}${DEFAULT}Update dependencies\n"
-  printf "${COMMAND}  update-dry   ${SPACING}${DEFAULT}Fake update dependencies\n"
+  printf "${COMMAND}  install      ${SPACING}${DEFAULT}Install composer dependencies\n"
+  printf "${COMMAND}  install-dry  ${SPACING}${DEFAULT}Fake install composer dependencies\n"
+  printf "${COMMAND}  outdated     ${SPACING}${DEFAULT}Show outdated composer dependencies\n"
+  printf "${COMMAND}  update       ${SPACING}${DEFAULT}Update composer dependencies\n"
+  printf "${COMMAND}  update-dry   ${SPACING}${DEFAULT}Fake update composer dependencies\n"
 
   printf "${CATEGORY} Database\n"
   printf "${COMMAND}  fresh|refresh${SPACING}${DEFAULT}Drop all tables and run all migrations\n"
@@ -123,6 +126,12 @@ addCommandForTarget () {
 
 case "$1" in
   # Assets
+  n-install)
+    addCommandForTarget container "npm install" ;;
+  n-outdated)
+    addCommandForTarget container "npm outdated" ;;
+  n-update)
+    addCommandForTarget container "npm update" ;;
   run-dev)
     addCommandForTarget container "npm run dev" ;;
   run-prod)
