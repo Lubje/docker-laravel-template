@@ -15,13 +15,6 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
   printf "${DEFAULT}Use ./develop.sh ${COMMAND}<command>${DEFAULT}\n\n"
 
   printf "${DEFAULT}Available ${COMMAND}commands${DEFAULT} per ${CATEGORY}category${DEFAULT}:\n"
-  printf "${CATEGORY} Npm\n"
-  printf "${COMMAND}  n-install    ${SPACING}${DEFAULT}Install npm dependencies\n"
-  printf "${COMMAND}  n-outdated   ${SPACING}${DEFAULT}Show outdated npm dependencies\n"
-  printf "${COMMAND}  n-update     ${SPACING}${DEFAULT}Update npm dependencies\n"
-  printf "${COMMAND}  run-dev      ${SPACING}${DEFAULT}Compile assets for development\n"
-  printf "${COMMAND}  run-prod     ${SPACING}${DEFAULT}Compile assets for production\n"
-  printf "${COMMAND}  watch        ${SPACING}${DEFAULT}Run scripts from package.json when files change\n"
 
   printf "${CATEGORY} Composer\n"
   printf "${COMMAND}  install      ${SPACING}${DEFAULT}Install composer dependencies\n"
@@ -53,6 +46,14 @@ if [ -z "$1" ] || [ "$1" == "help" ] || [ "$1" == "commands" ]; then
 
   printf "${CATEGORY} Logging\n"
   printf "${COMMAND}  log|logs     ${SPACING}${DEFAULT}Tail logs, use optional 1st argument to specify a service (mysql,nginx,php,redis)\n"
+
+  printf "${CATEGORY} Npm\n"
+  printf "${COMMAND}  n-install    ${SPACING}${DEFAULT}Install npm dependencies\n"
+  printf "${COMMAND}  n-outdated   ${SPACING}${DEFAULT}Show outdated npm dependencies\n"
+  printf "${COMMAND}  n-update     ${SPACING}${DEFAULT}Update npm dependencies\n"
+  printf "${COMMAND}  run-dev      ${SPACING}${DEFAULT}Compile assets for development\n"
+  printf "${COMMAND}  run-prod     ${SPACING}${DEFAULT}Compile assets for production\n"
+  printf "${COMMAND}  watch        ${SPACING}${DEFAULT}Run scripts from package.json when files change\n"
 
   printf "${CATEGORY} Optimization\n"
   printf "${COMMAND}  cache|clear  ${SPACING}${DEFAULT}Clear all the cache\n"
@@ -125,20 +126,6 @@ addCommandForTarget () {
 }
 
 case "$1" in
-  # Assets
-  n-install)
-    addCommandForTarget container "npm install" ;;
-  n-outdated)
-    addCommandForTarget container "npm outdated" ;;
-  n-update)
-    addCommandForTarget container "npm update" ;;
-  run-dev)
-    addCommandForTarget container "npm run dev" ;;
-  run-prod)
-    addCommandForTarget container "npm run prod" ;;
-  watch)
-    addCommandForTarget container "npm run watch" ;;
-
   # Composer
   install)
     addCommandForTarget container "composer install" ;;
@@ -195,6 +182,20 @@ case "$1" in
   # Logging
   log|logs)
     addCommandForTarget host "docker-compose logs --follow --timestamps --tail=100 $([[ $# -gt 1 ]] && echo "$2")" ;;
+
+  # Npm
+  n-install)
+    addCommandForTarget container "npm install" ;;
+  n-outdated)
+    addCommandForTarget container "npm outdated" ;;
+  n-update)
+    addCommandForTarget container "npm update" ;;
+  run-dev)
+    addCommandForTarget container "npm run dev" ;;
+  run-prod)
+    addCommandForTarget container "npm run prod" ;;
+  watch)
+    addCommandForTarget container "npm run watch" ;;
 
   # Optimization
   cache|clear)
